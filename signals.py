@@ -1,8 +1,8 @@
 import fnmatch
 import json
-import django.dispatch
-
 import logging
+
+import django.dispatch
 
 logger = logging.getLogger(__name__)
 
@@ -10,7 +10,7 @@ connect = django.dispatch.Signal(providing_args=["userdata", "flags", "rc"])
 message = django.dispatch.Signal(providing_args=["userdata", "msg"])
 
 
-def glob(matcher):
+def topic(matcher, **extras):
     def wrap(func):
         def inner(msg, **kwargs):
             if fnmatch.fnmatch(msg.topic, matcher):
@@ -21,6 +21,7 @@ def glob(matcher):
                     **kwargs
                 )
 
+        message.connect(inner, **extras)
         return inner
 
     return wrap

@@ -27,7 +27,15 @@ class OnSubscribe(APIView):
         return JsonResponse({"result": "ok"})
 
 
+# https://docs.vernemq.com/plugindevelopment/webhookplugins#auth_on_publish
+class OnPublish(APIView):
+    def post(self, request):
+        # TODO Proper auth
+        return JsonResponse({"result": "ok"})
+
+
 urlpatterns = [
     path("auth_on_register", OnRegister.as_view()),
     path("auth_on_subscribe", OnSubscribe.as_view()),
+    path("auth_on_publish", OnPublish.as_view()),
 ]

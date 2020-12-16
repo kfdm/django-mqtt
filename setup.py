@@ -5,7 +5,7 @@ setup(
     author="Paul Traylor",
     url="http://github.com/kfdm/django-mqtt",
     install_requires=[
-        "Django>-2.0",
+        "Django>=2.0",
         "paho-mqtt",
     ],
 )

@@ -13,10 +13,10 @@ logging.basicConfig(level=logging.DEBUG)
 
 class Client(mqtt.Client):
     def on_connect(self, client, userdata, flags, rc):
-        connect.send(client, userdata=userdata, flags=flags, rc=rc)
+        connect.send_robust(client, userdata=userdata, flags=flags, rc=rc)
 
     def on_message(self, client, userdata, msg):
-        message.send(client, userdata=userdata, msg=msg)
+        message.send_robust(client, userdata=userdata, msg=msg)
 
 
 class Command(BaseCommand):

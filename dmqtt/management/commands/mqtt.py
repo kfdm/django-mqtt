@@ -1,5 +1,5 @@
 import logging
-
+import os
 import paho.mqtt.client as mqtt
 
 from django.conf import settings
@@ -26,11 +26,13 @@ class Client(mqtt.Client):
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
+        domain = get_current_site(None).domain
+        pid = os.getpid()
         parser.add_argument("-u", "--user", default=settings.MQTT_USER)
         parser.add_argument("-P", "--password", default=settings.MQTT_PASS)
         parser.add_argument("-H", "--host", default=settings.MQTT_HOST)
         parser.add_argument("--port", default=settings.MQTT_PORT, type=int)
-        parser.add_argument("--client-id", default=get_current_site(None).domain)
+        parser.add_argument("--client-id", default=f"{domain}-{pid}")
 
     def handle(self, verbosity, **kwargs):
         logging.root.setLevel(

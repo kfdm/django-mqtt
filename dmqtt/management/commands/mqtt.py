@@ -2,11 +2,11 @@ import logging
 
 import paho.mqtt.client as mqtt
 
-from dmqtt.signals import connect, message
-
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.management.base import BaseCommand
+
+from dmqtt.signals import connect, message
 
 logging.basicConfig(level=logging.DEBUG)
 

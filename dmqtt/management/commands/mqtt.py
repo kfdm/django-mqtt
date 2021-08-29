@@ -16,6 +16,11 @@ class Client(mqtt.Client):
         connect.send_robust(client, userdata=userdata, flags=flags, rc=rc)
 
     def on_message(self, client, userdata, msg):
+        if logging.root.isEnabledFor(logging.INFO):
+            try:
+                print(msg.topic, msg.payload.decode("utf8"))
+            except UnicodeDecodeError:
+                print(msg.topic, "** Unknown Encoding **")
         message.send_robust(client, userdata=userdata, msg=msg)
 
 

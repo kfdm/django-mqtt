@@ -1,10 +1,12 @@
 import json
 import logging
 
+from rest_framework.views import APIView
+
 from django.contrib.auth import authenticate
+from django.contrib.auth.signals import user_login_failed
 from django.http import HttpResponseForbidden, JsonResponse
 from django.urls import path
-from rest_framework.views import APIView
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +18,11 @@ class GetUser(APIView):
         if authenticate(request, username=data["username"], password=data["password"]):
             return JsonResponse({"result": "ok"})
         logger.debug("Invalid login for %s", data["username"])
+        user_login_failed.send(
+            sender=__name__,
+            credentials={key: data[key] for key in data if key not in ["password"]},
+            request=request,
+        )
         return HttpResponseForbidden()
 
 

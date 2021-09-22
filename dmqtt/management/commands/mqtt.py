@@ -1,5 +1,7 @@
+import json
 import logging
 import os
+
 import paho.mqtt.client as mqtt
 
 from django.conf import settings
@@ -22,6 +24,12 @@ class Client(mqtt.Client):
             except UnicodeDecodeError:
                 print(msg.topic, "** Unknown Encoding **")
         message.send_robust(client, userdata=userdata, msg=msg)
+
+    def publish(self, topic, **kwargs):
+        if "json" in kwargs:
+            data = kwargs.pop("json")
+            kwargs["payload"] = json.dumps(data)
+        super().publish(topic, **kwargs)
 
 
 class Command(BaseCommand):

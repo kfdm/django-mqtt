@@ -1,13 +1,12 @@
 import logging
-import os
 
 import paho.mqtt.client as mqtt
 
 from django.conf import settings
-from django.contrib.sites.shortcuts import get_current_site
 from django.core.management.base import BaseCommand
 from django.test import override_settings
 
+from dmqtt.shortcuts import client_id
 from dmqtt.signals import connect, message
 
 logging.basicConfig(level=logging.DEBUG)
@@ -28,14 +27,12 @@ class Client(mqtt.Client):
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
-        domain = get_current_site(None).domain
-        pid = os.getpid()
         mqtt = parser.add_argument_group("mqtt server arguments")
         mqtt.add_argument("-u", "--user", default=settings.MQTT_USER)
         mqtt.add_argument("-P", "--password", default=settings.MQTT_PASS)
         mqtt.add_argument("-H", "--host", default=settings.MQTT_HOST)
         mqtt.add_argument("--port", default=settings.MQTT_PORT, type=int)
-        mqtt.add_argument("--client-id", default=f"{domain}-{pid}")
+        mqtt.add_argument("--client-id", default=client_id())
 
         celery = parser.add_argument_group("celery arguments")
         celery.add_argument("--eager", action="store_true")

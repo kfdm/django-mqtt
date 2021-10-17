@@ -1,5 +1,6 @@
 import json
 import uuid
+from functools import lru_cache
 
 from paho.mqtt import publish
 from rest_framework.utils.encoders import JSONEncoder
@@ -8,6 +9,11 @@ from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 
 __all__ = ["single"]
+
+
+@lru_cache(maxsize=1)
+def client_id():
+    return (get_current_site(None).domain + "-%d" % uuid.uuid4().int)[:32]
 
 
 def single(topic, **kwargs):

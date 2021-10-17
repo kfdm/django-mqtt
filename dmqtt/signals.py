@@ -1,6 +1,7 @@
 import fnmatch
 import json
 import logging
+import re
 
 import django.dispatch
 
@@ -18,6 +19,24 @@ def topic(matcher, as_json=True, **extras):
                 if as_json:
                     kwargs["data"] = json.loads(msg.payload.decode("utf8"))
                 func(topic=msg.topic, **kwargs)
+
+        message.connect(inner, **extras)
+        return inner
+
+    return wrap
+
+
+def regex(pattern, *, as_json=True, **extras):
+    matcher = re.compile(pattern)
+
+    def wrap(func):
+        def inner(msg, **kwargs):
+            match = matcher.match(msg.topic)
+            if match:
+                logger.debug("Matched %s for %s", match, func)
+                if as_json:
+                    kwargs["data"] = json.loads(msg.payload.decode("utf8"))
+                func(topic=msg.topic, match=match, **kwargs)
 
         message.connect(inner, **extras)
         return inner

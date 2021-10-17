@@ -23,7 +23,7 @@ def single(topic, **kwargs):
 
     return publish.single(
         topic,
-        client_id=get_current_site(None).domain + "-%d" % uuid.uuid4().int,
+        client_id=client_id(),
         hostname=settings.MQTT_HOST,
         port=settings.MQTT_PORT,
         auth={"username": settings.MQTT_USER, "password": settings.MQTT_PASS},

@@ -8,11 +8,12 @@ from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
-        parser.add_argument("topic")
-        parser.add_argument("-u", "--user", default=settings.MQTT_USER)
-        parser.add_argument("-P", "--password", default=settings.MQTT_PASS)
-        parser.add_argument("-H", "--host", default=settings.MQTT_HOST)
-        parser.add_argument("--port", default=settings.MQTT_PORT, type=int)
+        mqtt = parser.add_argument_group("mqtt server arguments")
+        mqtt.add_argument("topic", help="MQTT Topic to send to")
+        mqtt.add_argument("-u", "--user", default=settings.MQTT_USER)
+        mqtt.add_argument("-P", "--password", default=settings.MQTT_PASS)
+        mqtt.add_argument("-H", "--host", default=settings.MQTT_HOST)
+        mqtt.add_argument("--port", default=settings.MQTT_PORT, type=int)
 
     def handle(self, topic, **kwargs):
         single(

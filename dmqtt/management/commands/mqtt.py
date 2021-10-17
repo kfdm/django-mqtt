@@ -1,10 +1,12 @@
 import logging
 import os
+
 import paho.mqtt.client as mqtt
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.management.base import BaseCommand
+from django.test import override_settings
 
 from dmqtt.signals import connect, message
 
@@ -28,13 +30,17 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         domain = get_current_site(None).domain
         pid = os.getpid()
-        parser.add_argument("-u", "--user", default=settings.MQTT_USER)
-        parser.add_argument("-P", "--password", default=settings.MQTT_PASS)
-        parser.add_argument("-H", "--host", default=settings.MQTT_HOST)
-        parser.add_argument("--port", default=settings.MQTT_PORT, type=int)
-        parser.add_argument("--client-id", default=f"{domain}-{pid}")
+        mqtt = parser.add_argument_group("mqtt server arguments")
+        mqtt.add_argument("-u", "--user", default=settings.MQTT_USER)
+        mqtt.add_argument("-P", "--password", default=settings.MQTT_PASS)
+        mqtt.add_argument("-H", "--host", default=settings.MQTT_HOST)
+        mqtt.add_argument("--port", default=settings.MQTT_PORT, type=int)
+        mqtt.add_argument("--client-id", default=f"{domain}-{pid}")
 
-    def handle(self, verbosity, **kwargs):
+        celery = parser.add_argument_group("celery arguments")
+        celery.add_argument("--eager", action="store_true")
+
+    def handle(self, verbosity, eager, **kwargs):
         logging.root.setLevel(
             {
                 0: logging.ERROR,
@@ -51,11 +57,12 @@ class Command(BaseCommand):
         # client.tls_set()
         client.connect(kwargs["host"], kwargs["port"], 60)
 
-        # Blocking call that processes network traffic, dispatches callbacks and
-        # handles reconnecting.
-        # Other loop*() functions are available that give a threaded interface and a
-        # manual interface.
-        try:
-            client.loop_forever()
-        except KeyboardInterrupt:
-            client.disconnect()
+        with override_settings(CELERY_TASK_ALWAYS_EAGER=eager):
+            # Blocking call that processes network traffic, dispatches callbacks and
+            # handles reconnecting.
+            # Other loop*() functions are available that give a threaded interface and a
+            # manual interface.
+            try:
+                client.loop_forever()
+            except KeyboardInterrupt:
+                client.disconnect()

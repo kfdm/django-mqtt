@@ -3,14 +3,14 @@ import logging
 import paho.mqtt.client as mqtt
 from zakka.mixins.command import LoggingMixin
 
+from . import green, red
+
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.test import override_settings
 
 from dmqtt.shortcuts import client_id
 from dmqtt.signals import connect, message
-
-logging.basicConfig(level=logging.DEBUG)
 
 
 class Client(mqtt.Client):
@@ -20,9 +20,9 @@ class Client(mqtt.Client):
     def on_message(self, client, userdata, msg):
         if logging.root.isEnabledFor(logging.INFO):
             try:
-                print(msg.topic, msg.payload.decode("utf8"))
+                print(green(msg.topic), msg.payload.decode("utf8"))
             except UnicodeDecodeError:
-                print(msg.topic, "** Unknown Encoding **")
+                print(red(msg.topic), "** Unknown Encoding **")
         message.send_robust(client, userdata=userdata, msg=msg)
 
 

@@ -1,6 +1,7 @@
 import logging
 
 import paho.mqtt.client as mqtt
+from zakka.mixins.command import LoggingMixin
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -25,7 +26,7 @@ class Client(mqtt.Client):
         message.send_robust(client, userdata=userdata, msg=msg)
 
 
-class Command(BaseCommand):
+class Command(LoggingMixin, BaseCommand):
     def add_arguments(self, parser):
         mqtt = parser.add_argument_group("mqtt server arguments")
         mqtt.add_argument("-u", "--user", default=settings.MQTT_USER)
@@ -37,16 +38,7 @@ class Command(BaseCommand):
         celery = parser.add_argument_group("celery arguments")
         celery.add_argument("--eager", action="store_true")
 
-    def handle(self, verbosity, eager, **kwargs):
-        logging.root.setLevel(
-            {
-                0: logging.ERROR,
-                1: logging.WARNING,
-                2: logging.INFO,
-                3: logging.DEBUG,
-            }.get(verbosity)
-        )
-
+    def handle(self, eager, **kwargs):
         client = Client(client_id=kwargs["client_id"])
         client.enable_logger()  # Use Python logging
         client.username_pw_set(kwargs["user"], password=kwargs["password"])

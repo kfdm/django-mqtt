@@ -1,4 +1,5 @@
 import fnmatch
+import functools
 import json
 import logging
 import re
@@ -13,6 +14,7 @@ message = django.dispatch.Signal(providing_args=["userdata", "msg"])
 
 def topic(matcher, as_json=True, **extras):
     def wrap(func):
+        @functools.wraps(func)
         def inner(msg, **kwargs):
             if fnmatch.fnmatch(msg.topic, matcher):
                 logger.debug("Matched %s for %s", matcher, func)
@@ -30,6 +32,7 @@ def regex(pattern, *, as_json=True, **extras):
     matcher = re.compile(pattern)
 
     def wrap(func):
+        @functools.wraps(func)
         def inner(msg, **kwargs):
             match = matcher.match(msg.topic)
             if match:

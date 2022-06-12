@@ -26,12 +26,12 @@ class Client(mqtt.Client):
                 print(msg.topic, "** Unknown Encoding **")
         message.send_robust(client, userdata=userdata, msg=msg)
 
-    def publish(self, topic, **kwargs):
+    def publish(self, *args, **kwargs):
         if "json" in kwargs:
             data = kwargs.pop("json")
             kwargs["payload"] = json.dumps(data, cls=JSONEncoder).encode("utf8")
 
-        super().publish(topic=topic, **kwargs)
+        super().publish(*args, **kwargs)
 
 
 class Command(BaseCommand):

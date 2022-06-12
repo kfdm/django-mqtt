@@ -21,11 +21,17 @@ def single(topic, **kwargs):
         data = kwargs.pop("json")
         kwargs["payload"] = json.dumps(data, cls=JSONEncoder).encode("utf8")
 
+    if settings.MQTT_USER and settings.MQTT_PASS:
+        kwargs["auth"] = {
+            "username": settings.MQTT_USER,
+            "password": settings.MQTT_PASS,
+        }
+
     return publish.single(
         topic,
         client_id=client_id(),
         hostname=settings.MQTT_HOST,
         port=settings.MQTT_PORT,
         auth={"username": settings.MQTT_USER, "password": settings.MQTT_PASS},
-        **kwargs
+        **kwargs,
     )

@@ -3,10 +3,18 @@ import uuid
 from functools import lru_cache
 
 from paho.mqtt import publish
-from rest_framework.utils.encoders import JSONEncoder
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+
+# The JSONEncoder from DRF handles quite a few types, so we efault to that
+# if avaiable and if not fallback to the Django one which still handles some
+# extra types
+try:
+    from rest_framework.utils.encoders import JSONEncoder
+except ImportError:
+    from django.core.serializers.json import DjangoJSONEncoder as JSONEncoder
+
 
 __all__ = ["single"]
 

@@ -2,7 +2,6 @@ import json
 import logging
 
 import paho.mqtt.client as mqtt
-from rest_framework.utils.encoders import JSONEncoder
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -10,6 +9,14 @@ from django.test import override_settings
 
 from dmqtt.shortcuts import client_id
 from dmqtt.signals import connect, message
+
+# The JSONEncoder from DRF handles quite a few types, so we efault to that
+# if avaiable and if not fallback to the Django one which still handles some
+# extra types
+try:
+    from rest_framework.utils.encoders import JSONEncoder
+except ImportError:
+    from django.core.serializers.json import DjangoJSONEncoder as JSONEncoder
 
 logging.basicConfig(level=logging.DEBUG)
 

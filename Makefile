@@ -14,7 +14,7 @@ $(PIP_BIN):
 ${APP_BIN}: $(PIP_BIN)
 	${PIP_BIN} install -e .
 
-build:
+build: $(PIP_BIN)
 	${PYTHON_BIN} setup.py sdist
 
 clean:

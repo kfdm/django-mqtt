@@ -40,6 +40,5 @@ def single(topic, **kwargs):
         client_id=client_id(),
         hostname=settings.MQTT_HOST,
         port=settings.MQTT_PORT,
-        auth={"username": settings.MQTT_USER, "password": settings.MQTT_PASS},
         **kwargs,
     )

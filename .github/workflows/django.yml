@@ -28,6 +28,7 @@ jobs:
           cache-dependency-path: "setup.cfg"
           python-version: ${{ matrix.python-version }}
 
+      - run: pip install -U pip wheel
       - run: pip install django==${{ matrix.django-version }} -e .
 
       - name: Run tests

@@ -20,9 +20,12 @@ def on_connect(sender, **kwargs):
 
 @topic("some/mqtt/topic")
 def simple_topic(sender, topic, data, **kwargs):
-    pass
+    print(topic)
+    print(data)
 
-@regex("^some/(?P<username>[^/]+)/(?P<topic>[^/]+)$")
+@regex("^some/(?P<username>[^/]+)/(?P<device>[^/]+)$")
 def regex_topic(match, data, **kwargs):
     device = match.groupdict()
+    print(device['username'], device['device])
+    print(data)
 ```

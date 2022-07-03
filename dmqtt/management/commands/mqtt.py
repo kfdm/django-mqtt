@@ -1,4 +1,3 @@
-import json
 import logging
 
 import paho.mqtt.client as mqtt
@@ -7,16 +6,8 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.test import override_settings
 
-from dmqtt.shortcuts import client_id
+from dmqtt.shortcuts import client_id, json_payload
 from dmqtt.signals import connect, message
-
-# The JSONEncoder from DRF handles quite a few types, so we efault to that
-# if avaiable and if not fallback to the Django one which still handles some
-# extra types
-try:
-    from rest_framework.utils.encoders import JSONEncoder
-except ImportError:
-    from django.core.serializers.json import DjangoJSONEncoder as JSONEncoder
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -33,12 +24,7 @@ class Client(mqtt.Client):
                 print(msg.topic, "** Unknown Encoding **")
         message.send_robust(client, userdata=userdata, msg=msg)
 
-    def publish(self, *args, **kwargs):
-        if "json" in kwargs:
-            data = kwargs.pop("json")
-            kwargs["payload"] = json.dumps(data, cls=JSONEncoder).encode("utf8")
-
-        super().publish(*args, **kwargs)
+    publish = json_payload(mqtt.Client.publish)
 
 
 class Command(BaseCommand):

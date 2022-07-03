@@ -4,7 +4,7 @@ import logging
 from rest_framework.views import APIView
 
 from django.contrib.auth import authenticate
-from django.contrib.auth.signals import user_login_failed
+from django.contrib.auth.signals import user_logged_in
 from django.http import HttpResponseForbidden, JsonResponse
 from django.urls import path
 
@@ -15,15 +15,17 @@ logger = logging.getLogger(__name__)
 class GetUser(APIView):
     def post(self, request):
         data = json.loads(request.body.decode("utf-8"))
-        if authenticate(request, username=data["username"], password=data["password"]):
-            return JsonResponse({"result": "ok"})
-        logger.debug("Invalid login for %s", data["username"])
-        user_login_failed.send(
-            sender=__name__,
-            credentials={key: data[key] for key in data if key not in ["password"]},
-            request=request,
+        user = authenticate(
+            request,
+            username=data["username"],
+            password=data["password"],
         )
-        return HttpResponseForbidden()
+        if user is None:
+            return HttpResponseForbidden()
+
+        user_logged_in.send(sender=user.__class__, request=request, user=user)
+
+        return JsonResponse({"result": "ok"})
 
 
 class ACLCheck(APIView):

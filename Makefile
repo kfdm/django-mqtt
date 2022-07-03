@@ -6,7 +6,7 @@ PYTHON_BIN := .venv/bin/python
 .DEFAULT: test
 
 test: ${APP_BIN}
-	${APP_BIN} test -v 2
+	DJANGO_SETTINGS_MODULE=tests.settings ${APP_BIN} test -v 2
 
 $(PIP_BIN):
 	python3 -m venv .venv
@@ -14,7 +14,7 @@ $(PIP_BIN):
 ${APP_BIN}: $(PIP_BIN)
 	${PIP_BIN} install -e .
 
-build:
+build: $(PIP_BIN)
 	${PYTHON_BIN} setup.py sdist
 
 clean:

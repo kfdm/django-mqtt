@@ -12,7 +12,9 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.8"]
+        # https://endoflife.date/python
+        python-version: ["3.8", "3.9", "3.10"]
+        # https://endoflife.date/django
         django-version: ["3.2", "4.0", "4.1b1"]
         include:
           - python-version: "3.6"

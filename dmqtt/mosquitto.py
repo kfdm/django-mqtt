@@ -1,18 +1,18 @@
 import json
 import logging
 
-from rest_framework.views import APIView
-
 from django.contrib.auth import authenticate
 from django.contrib.auth.signals import user_logged_in
 from django.http import HttpResponseForbidden, JsonResponse
 from django.urls import path
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 
 logger = logging.getLogger(__name__)
 
 
 # https://github.com/iegomez/mosquitto-go-auth#http
-class GetUser(APIView):
+class GetUser(View):
     def post(self, request):
         data = json.loads(request.body.decode("utf-8"))
         user = authenticate(
@@ -28,13 +28,13 @@ class GetUser(APIView):
         return JsonResponse({"result": "ok"})
 
 
-class ACLCheck(APIView):
+class ACLCheck(View):
     def post(self, request):
         # TODO Proper auth
         return JsonResponse({"result": "ok"})
 
 
 urlpatterns = [
-    path("getuser", GetUser.as_view()),
-    path("aclcheck", ACLCheck.as_view()),
+    path("getuser", csrf_exempt(GetUser.as_view())),
+    path("aclcheck", csrf_exempt(ACLCheck.as_view())),
 ]

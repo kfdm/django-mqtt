@@ -29,3 +29,37 @@ def regex_topic(match, data, **kwargs):
     print(device['username'], device['device])
     print(data)
 ```
+
+# Authentication
+
+## mosquitto-go-auth
+
+Used with <https://github.com/iegomez/mosquitto-go-auth>
+
+```python
+# From example project urls
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path("mosquitto/", include("dmqtt.mosquitto")),
+    path("account/", include(("django.contrib.auth.urls", "auth"), namespace="auth")),
+    path("admin/", admin.site.urls),
+]
+```
+
+```
+# mosquitto configuration
+# https://github.com/iegomez/mosquitto-go-auth#http
+auth_plugin /mosquitto/go-auth.so
+auth_opt_backends http
+auth_opt_check_prefix false
+
+auth_opt_http_host example.com
+auth_opt_http_getuser_uri /mosquitto/getuser
+auth_opt_http_aclcheck_uri /mosquitto/aclcheck
+
+# If using https
+auth_opt_http_port 443
+auth_opt_http_with_tls true
+```

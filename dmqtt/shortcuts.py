@@ -7,8 +7,8 @@ from paho.mqtt import publish
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 
-# The JSONEncoder from DRF handles quite a few types, so we efault to that
-# if avaiable and if not fallback to the Django one which still handles some
+# The JSONEncoder from DRF handles quite a few types, so we default to that
+# if available and if not fallback to the Django one which still handles some
 # extra types
 try:
     from rest_framework.utils.encoders import JSONEncoder

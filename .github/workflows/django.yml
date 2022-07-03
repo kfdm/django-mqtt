@@ -13,18 +13,17 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.6", "3.7", "3.8"]
+        django-version: ["3.2", "4.0", "4.1"]
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with:
+          cache: "pip"
+          cache-dependency-path: "setup.cfg"
           python-version: ${{ matrix.python-version }}
-      - uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ hashFiles('setup.cfg') }}-${{ hashFiles('docker/requirements.txt') }}
+
+      - run: pip install django==${{ matrix.django-version }}
 
       - name: Run tests
         run: make test
-        env:
-          SECRET_KEY: github-actions

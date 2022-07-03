@@ -1,18 +1,18 @@
 import json
 import logging
 
-from rest_framework.views import APIView
-
 from django.contrib.auth import authenticate
 from django.contrib.auth.signals import user_login_failed
 from django.http import HttpResponseForbidden, JsonResponse
 from django.urls import path
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 
 logger = logging.getLogger(__name__)
 
 
 # https://docs.vernemq.com/plugindevelopment/webhookplugins#auth_on_register
-class OnRegister(APIView):
+class OnRegister(View):
     def post(self, request):
         data = json.loads(request.body.decode("utf-8"))
         if authenticate(request, username=data["username"], password=data["password"]):
@@ -27,21 +27,21 @@ class OnRegister(APIView):
 
 
 # https://docs.vernemq.com/plugindevelopment/webhookplugins#auth_on_subscribe
-class OnSubscribe(APIView):
+class OnSubscribe(View):
     def post(self, request):
         # TODO Proper auth
         return JsonResponse({"result": "ok"})
 
 
 # https://docs.vernemq.com/plugindevelopment/webhookplugins#auth_on_publish
-class OnPublish(APIView):
+class OnPublish(View):
     def post(self, request):
         # TODO Proper auth
         return JsonResponse({"result": "ok"})
 
 
 urlpatterns = [
-    path("auth_on_register", OnRegister.as_view()),
-    path("auth_on_subscribe", OnSubscribe.as_view()),
-    path("auth_on_publish", OnPublish.as_view()),
+    path("auth_on_register", csrf_exempt(OnRegister.as_view())),
+    path("auth_on_subscribe", csrf_exempt(OnSubscribe.as_view())),
+    path("auth_on_publish", csrf_exempt(OnPublish.as_view())),
 ]

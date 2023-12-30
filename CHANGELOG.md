@@ -1,3 +1,7 @@
+# 0.4.0 - 2023-12-30
+
+- [BUGFIX] Only use get_current_site if django.contrib.sites installed.
+
 # 0.4.0 - 2022-07-04
 
 - [IMPROVEMENT] Remove djangorestframework requirement #3

@@ -1,7 +1,7 @@
 import json
 import uuid
 from functools import lru_cache, wraps
-
+from django.apps import apps
 from paho.mqtt import publish
 
 from django.conf import settings
@@ -37,7 +37,9 @@ def json_payload(func):
 
 @lru_cache(maxsize=1)
 def default_client_id():
-    return (get_current_site(None).domain + "-%d" % uuid.uuid4().int)[:32]
+    if apps.is_installed("django.contrib.sites"):
+        return (get_current_site(None).domain + "-%d" % uuid.uuid4().int)[:32]
+    return ""
 
 
 @json_payload

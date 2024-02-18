@@ -28,6 +28,8 @@ class Client(mqtt.Client):
 
 
 class Command(LoggingMixin, BaseCommand):
+    mqtt_client = Client
+
     def add_arguments(self, parser):
         mqtt = parser.add_argument_group("mqtt server arguments")
         mqtt.add_argument("-u", "--user", default=settings.MQTT_USER)
@@ -40,7 +42,7 @@ class Command(LoggingMixin, BaseCommand):
         celery.add_argument("--eager", action="store_true")
 
     def handle(self, eager, **kwargs):
-        client = Client(client_id=kwargs["client_id"])
+        client = self.mqtt_client(client_id=kwargs["client_id"])
         client.enable_logger()  # Use Python logging
         client.username_pw_set(kwargs["user"], password=kwargs["password"])
         # TODO Fix

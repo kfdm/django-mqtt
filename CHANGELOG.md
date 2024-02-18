@@ -1,3 +1,10 @@
+# 0.4.2 - 2023-02-18
+
+- [BUGFIX] Only use get_current_site if django.contrib.sites is installed.
+- [IMPROVEMENT]Allow overriding client_id to shortcuts.single
+- [IMPROVEMENT] Allow overriding mysql_client Class
+- [INTERNAL] Migrate to pyproject.toml
+
 # 0.4.0 - 2022-07-04
 
 - [IMPROVEMENT] Remove djangorestframework requirement #3

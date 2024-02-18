@@ -40,3 +40,6 @@ dependencies = [
 [project.urls]
 Issues = "http://github.com/kfdm/django-mqtt/issues"
 "Source Code" = "http://github.com/kfdm/django-mqtt"
+
+[tool.ruff]
+line-length = 100

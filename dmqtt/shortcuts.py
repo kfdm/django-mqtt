@@ -1,11 +1,11 @@
 import json
 import uuid
 from functools import lru_cache, wraps
-from django.apps import apps
-from paho.mqtt import publish
 
+from django.apps import apps
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from paho.mqtt import publish
 
 # The JSONEncoder from DRF handles quite a few types, so we default to that
 # if available and if not fallback to the Django one which still handles some

@@ -36,13 +36,13 @@ def json_payload(func):
 
 
 @lru_cache(maxsize=1)
-def client_id():
+def default_client_id():
     return (get_current_site(None).domain + "-%d" % uuid.uuid4().int)[:32]
 
 
 @json_payload
 @wraps(publish.single)
-def single(topic, **kwargs):
+def single(topic, client_id=None, **kwargs):
     """
     Wrapped version of single, supporting AUTH and json payload
     """
@@ -51,10 +51,12 @@ def single(topic, **kwargs):
             "username": settings.MQTT_USER,
             "password": settings.MQTT_PASS,
         }
+    if client_id is None:
+        client_id = default_client_id()
 
     return publish.single(
         topic,
-        client_id=client_id(),
+        client_id=client_id,
         hostname=settings.MQTT_HOST,
         port=settings.MQTT_PORT,
         **kwargs,

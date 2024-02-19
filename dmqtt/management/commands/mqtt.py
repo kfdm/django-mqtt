@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.test import override_settings
 
-from dmqtt.shortcuts import client_id, json_payload
+from dmqtt.shortcuts import default_client_id, json_payload
 from dmqtt.signals import connect, message
 
 
@@ -36,7 +36,7 @@ class Command(LoggingMixin, BaseCommand):
         mqtt.add_argument("-P", "--password", default=settings.MQTT_PASS)
         mqtt.add_argument("-H", "--host", default=settings.MQTT_HOST)
         mqtt.add_argument("--port", default=settings.MQTT_PORT, type=int)
-        mqtt.add_argument("--client-id", default=client_id())
+        mqtt.add_argument("--client-id", default=default_client_id())
 
         celery = parser.add_argument_group("celery arguments")
         celery.add_argument("--eager", action="store_true")

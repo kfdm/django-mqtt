@@ -49,6 +49,14 @@ class Command(LoggingMixin, BaseCommand):
         # client.tls_set()
         client.connect(kwargs["host"], kwargs["port"], 60)
 
+        try:
+            from setproctitle import setproctitle
+        except ImportError:
+            pass
+        else:
+            if client._client_id:
+                setproctitle(f"[mqtt] {client._client_id.decode('utf8')}")
+
         with override_settings(CELERY_TASK_ALWAYS_EAGER=eager):
             # Blocking call that processes network traffic, dispatches callbacks and
             # handles reconnecting.

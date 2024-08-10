@@ -8,8 +8,10 @@ import django.dispatch
 
 logger = logging.getLogger(__name__)
 
-connect = django.dispatch.Signal(providing_args=["userdata", "flags", "rc"])
-message = django.dispatch.Signal(providing_args=["userdata", "msg"])
+# userdata, flags, rc
+connect = django.dispatch.Signal()
+# userdata, msg
+message = django.dispatch.Signal()
 
 
 def topic(matcher, as_json=True, **extras):

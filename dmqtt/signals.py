@@ -16,6 +16,9 @@ def topic(matcher, as_json=True, **extras):
     def wrap(func):
         @functools.wraps(func)
         def inner(msg, **kwargs):
+            # Convert MQTT-style wildcards (#) to Unix-style wildcards (*) 
+            # since MQTT uses '#' for multi-level wildcards while fnmatch expects '*'
+            matcher.replace("#", "*")
             if fnmatch.fnmatch(msg.topic, matcher):
                 logger.debug("Matched %s for %s", matcher, func)
                 if as_json:

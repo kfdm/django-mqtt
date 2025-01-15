@@ -17,20 +17,23 @@ except TypeError:
     message = django.dispatch.Signal()
 
 def convert_wildcards(mqtt_topic):
-    """Convert MQTT wildcards to fnmatch wildcards.
-    '#' becomes '*' (multi-level)
-    '+' becomes '?' (single-level)
+    """Convert MQTT wildcards to regex pattern.
+    '#' becomes '.*' (multi-level)
+    '+' becomes '[^/]+' (single-level)
     """
-    return mqtt_topic.replace("#", "*").replace("+", "?")
+    pattern = re.escape(mqtt_topic)
+    pattern = pattern.replace('\\#', '.*')
+    pattern = pattern.replace('\\+', '[^/]+')
+    return '^' + pattern + '$'
 
 def topic(matcher, as_json=True, **extras):
     def wrap(func):
         @functools.wraps(func)
         def inner(msg, **kwargs):
             nonlocal matcher
-            matcher = convert_wildcards(matcher)
-            if fnmatch.fnmatch(msg.topic, matcher):
-                logger.debug("Matched %s for %s", matcher, func)
+            regex_pattern = convert_wildcards(matcher)
+            if re.match(regex_pattern, msg.topic):
+                logger.debug("Matched %s for %s", regex_pattern, func)
                 if as_json:
                     kwargs["data"] = json.loads(msg.payload.decode("utf8"))
                 func(topic=msg.topic, msg=msg, **kwargs)

@@ -1,18 +1,20 @@
+import fnmatch
+import re
 from dmqtt.signals import convert_wildcards
 
-def test_convert_wildcards():
-    # Test basic wildcard conversion
-    assert convert_wildcards("home/#") == "home/*"
-    assert convert_wildcards("home/+/temp") == "home/?/temp"
-    
-    # Test multiple wildcards
-    assert convert_wildcards("home/#/+/test") == "home/*/?/test"
-    
-    # Test no wildcards
-    assert convert_wildcards("home/kitchen/temp") == "home/kitchen/temp"
-    
-    # Test empty string
-    assert convert_wildcards("") == ""
-    
-    # Test mixed wildcards
-    assert convert_wildcards("#/+/#/+") == "*/?/*/?"
+
+def test_single_level_wildcard():
+    pattern = convert_wildcards("home/+/status")
+    assert re.match(pattern, "home/kitchen/status")
+    assert not re.match(pattern, "home/kitchen/lights/status")
+
+def test_multi_level_wildcard():
+    pattern = convert_wildcards("home/#")
+    assert re.match(pattern, "home/kitchen/status")
+    assert re.match(pattern, "home/kitchen/lights/status")
+
+def test_mixed_wildcards():
+    pattern = convert_wildcards("home/+/lights/#")
+    assert re.match(pattern, "home/kitchen/lights/status")
+    assert re.match(pattern, "home/bathroom/lights/brightness/set")
+    assert not re.match(pattern, "home/status")

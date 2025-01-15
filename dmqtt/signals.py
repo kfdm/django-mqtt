@@ -8,17 +8,27 @@ import django.dispatch
 
 logger = logging.getLogger(__name__)
 
-connect = django.dispatch.Signal(providing_args=["userdata", "flags", "rc"])
-message = django.dispatch.Signal(providing_args=["userdata", "msg"])
+try:
+    connect = django.dispatch.Signal(providing_args=["userdata", "flags", "rc"])
+    message = django.dispatch.Signal(providing_args=["userdata", "msg"])
+except TypeError:
+    # for Django < 3.0
+    connect = django.dispatch.Signal()
+    message = django.dispatch.Signal()
 
+def convert_wildcards(mqtt_topic):
+    """Convert MQTT wildcards to fnmatch wildcards.
+    '#' becomes '*' (multi-level)
+    '+' becomes '?' (single-level)
+    """
+    return mqtt_topic.replace("#", "*").replace("+", "?")
 
 def topic(matcher, as_json=True, **extras):
     def wrap(func):
         @functools.wraps(func)
         def inner(msg, **kwargs):
-            # Convert MQTT-style wildcards (#) to Unix-style wildcards (*) 
-            # since MQTT uses '#' for multi-level wildcards while fnmatch expects '*'
-            matcher.replace("#", "*")
+            nonlocal matcher
+            matcher = convert_wildcards(matcher)
             if fnmatch.fnmatch(msg.topic, matcher):
                 logger.debug("Matched %s for %s", matcher, func)
                 if as_json:

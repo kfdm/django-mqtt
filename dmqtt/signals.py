@@ -1,4 +1,3 @@
-import fnmatch
 import functools
 import json
 import logging
@@ -13,23 +12,25 @@ connect = django.dispatch.Signal()
 # userdata, msg
 message = django.dispatch.Signal()
 
-def convert_wildcards(mqtt_topic):
+
+def convert_wildcards(mqtt_topic) -> re.Pattern:
     """Convert MQTT wildcards to regex pattern.
     '#' becomes '.*' (multi-level)
     '+' becomes '[^/]+' (single-level)
     """
     pattern = re.escape(mqtt_topic)
-    pattern = pattern.replace('\\#', '.*')
-    pattern = pattern.replace('\\+', '[^/]+')
-    return '^' + pattern + '$'
+    pattern = pattern.replace("\\#", ".*")
+    pattern = pattern.replace("\\+", "[^/]+")
+    return re.compile("^" + pattern + "$")
+
 
 def topic(matcher, as_json=True, **extras):
+    regex_pattern = convert_wildcards(matcher)
+
     def wrap(func):
         @functools.wraps(func)
         def inner(msg, **kwargs):
-            nonlocal matcher
-            regex_pattern = convert_wildcards(matcher)
-            if re.match(regex_pattern, msg.topic):
+            if regex_pattern.match(msg.topic):
                 logger.debug("Matched %s for %s", regex_pattern, func)
                 if as_json:
                     kwargs["data"] = json.loads(msg.payload.decode("utf8"))

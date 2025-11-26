@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "django-mqtt"
 version = "0.4.3"
-license = { text = "MIT License" }
+license = "MIT"
 authors = [{ name = "Paul Traylor" }]
 keywords = ["django mqtt"]
 classifiers = [
@@ -29,7 +29,9 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 readme = { file = "README.md", content-type = "text/markdown" }
+# https://endoflife.date/python
 requires-python = ">=3.9"
+# https://endoflife.date/django
 dependencies = [
     "Django>=4.2",
     "paho-mqtt",

@@ -1,3 +1,8 @@
+# 0.5.0 - 2025-11-29
+
+- [INTERNAL] Switch to uv_build and move to src layout
+- [BUGFIX] Fix handling of wildcards by compiling as regex
+
 # 0.4.2 - 2023-02-18
 
 - [BUGFIX] Only use get_current_site if django.contrib.sites is installed.

@@ -19,6 +19,8 @@ class Client(mqtt.Client):
     def on_message(self, client, userdata, msg):
         if logging.root.isEnabledFor(logging.INFO):
             try:
+                if msg.retain:
+                    print("*", end=" ")
                 print(msg.topic, msg.payload.decode("utf8"))
             except UnicodeDecodeError:
                 print(msg.topic, "** Unknown Encoding **")

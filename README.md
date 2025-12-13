@@ -3,6 +3,7 @@
 MQTT tools for Django project
 
 [![PyPI](https://img.shields.io/pypi/v/django-mqtt)](https://pypi.org/project/django-mqtt/)
+[![Published on Django Packages](https://img.shields.io/badge/Published%20on-Django%20Packages-0c3c26)](https://djangopackages.org/packages/p/django-mqtt/)
 
 # Usage
 

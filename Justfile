@@ -8,5 +8,5 @@ build:
     uv build --clear
 
 format:
-    uvx ruff check
+    uvx ruff check --fix
     uvx ruff format

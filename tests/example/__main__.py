@@ -1,34 +1,23 @@
-import argparse
+#!/usr/bin/env python
+"""Django's command-line utility for administrative tasks."""
+
 import os
 import sys
 
-import django
-from django.conf import settings
-from django.test.utils import get_runner
 
-os.environ["DJANGO_SETTINGS_MODULE"] = "tests.example.settings"
-
-parser = argparse.ArgumentParser()
-# Arguments from django-admin test
-parser.add_argument(
-    "-v",
-    "--verbosity",
-    default=1,
-    type=int,
-    choices=[0, 1, 2, 3],
-    help="Verbosity level; 0=minimal output, 1=normal output, 2=verbose output, 3=very verbose output",
-)
-parser.add_argument(
-    "args",
-    metavar="test_label",
-    nargs="*",
-    help="Module paths to test; can be modulename, modulename.TestCase or modulename.TestCase.test_method",
-)
-options = parser.parse_args()
+def main():
+    """Run administrative tasks."""
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "example.settings")
+    try:
+        from django.core.management import execute_from_command_line
+    except ImportError as exc:
+        raise ImportError(
+            "Couldn't import Django. Are you sure it's installed and "
+            "available on your PYTHONPATH environment variable? Did you "
+            "forget to activate a virtual environment?"
+        ) from exc
+    execute_from_command_line(sys.argv)
 
 
-django.setup()
-TestRunner = get_runner(settings)
-test_runner = TestRunner(verbosity=options.verbosity)
-failures = test_runner.run_tests(options.args)
-sys.exit(bool(failures))
+if __name__ == "__main__":
+    main()

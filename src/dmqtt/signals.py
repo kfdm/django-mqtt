@@ -34,7 +34,7 @@ def topic(matcher, as_json=True, **extras):
 
     def wrap(func):
         @functools.wraps(func)
-        def inner(msg: MQTTMessage, **kwargs):
+        def inner(msg: "MQTTMessage", **kwargs):
             if regex_pattern.match(msg.topic):
                 logger.debug("Matched %s for %s", regex_pattern, func)
                 if as_json:
@@ -52,7 +52,7 @@ def regex(pattern, *, as_json=True, **extras):
 
     def wrap(func):
         @functools.wraps(func)
-        def inner(msg: MQTTMessage, **kwargs):
+        def inner(msg: "MQTTMessage", **kwargs):
             match = matcher.match(msg.topic)
             if match:
                 logger.debug("Matched %s for %s", match, func)

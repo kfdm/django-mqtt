@@ -1,36 +1,16 @@
-import logging
-
-import paho.mqtt.client as mqtt
-
 from . import LoggingMixin
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.test import override_settings
 
-from dmqtt.shortcuts import default_client_id, json_payload
-from dmqtt.signals import connect, message
-
-
-class Client(mqtt.Client):
-    def on_connect(self, client, userdata, flags, rc):
-        connect.send_robust(client, userdata=userdata, flags=flags, rc=rc)
-
-    def on_message(self, client, userdata, msg):
-        if logging.root.isEnabledFor(logging.INFO):
-            try:
-                if msg.retain:
-                    print("*", end=" ")
-                print(msg.topic, msg.payload.decode("utf8"))
-            except UnicodeDecodeError:
-                print(msg.topic, "** Unknown Encoding **")
-        message.send_robust(client, userdata=userdata, msg=msg)
-
-    publish = json_payload(mqtt.Client.publish)
+from dmqtt.shortcuts import default_client_id
+from dmqtt.client import Client, get_client
 
 
 class Command(LoggingMixin, BaseCommand):
-    mqtt_client = Client
+    def get_mqtt_client(self) -> type[Client]:
+        return get_client()
 
     def add_arguments(self, parser):
         mqtt = parser.add_argument_group("mqtt server arguments")
@@ -44,7 +24,7 @@ class Command(LoggingMixin, BaseCommand):
         celery.add_argument("--eager", action="store_true")
 
     def handle(self, eager, **kwargs):
-        client = self.mqtt_client(client_id=kwargs["client_id"])
+        client = self.get_mqtt_client()(client_id=kwargs["client_id"])
         client.enable_logger()  # Use Python logging
         client.username_pw_set(kwargs["user"], password=kwargs["password"])
         # TODO Fix

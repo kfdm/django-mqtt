@@ -3,13 +3,13 @@ import sys
 from paho.mqtt.publish import single
 
 from django.conf import settings
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandParser
 
 from dmqtt.shortcuts import default_client_id
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: CommandParser):
         mqtt = parser.add_argument_group("mqtt server arguments")
         mqtt.add_argument("topic", help="MQTT Topic to send to")
         mqtt.add_argument("-u", "--user", default=settings.MQTT_USER)

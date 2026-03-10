@@ -6,6 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = "fake-key"
 INSTALLED_APPS = [
     "django.contrib.auth",
+    "django.contrib.sites",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "tests",
@@ -30,6 +31,8 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+SITE_ID = 1
 
 MQTT_HOST = "localhost"
 MQTT_PORT = 1883

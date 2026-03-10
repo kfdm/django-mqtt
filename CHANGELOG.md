@@ -1,3 +1,11 @@
+# 0.6.0 - 2026-03-10
+
+- [IMPROVEMENT] Add `dmqtt.shortcuts.multiple` to match our earlier `single` shortcut and be more compatible with upstream.
+- [IMPROVEMENT] Add support for django checks framework
+- [IMPROVEMENT] Use dmqtt.client.get_client() and `MQTT_CLIENT` setting to replace with custom client
+- [INTERNAL] Cleanup of decorators and add more type hints
+- [INTERNAL] Move our mqtt.Client to dmqtt.client to be easier to extend and use with type hinting
+
 # 0.5.0 - 2025-11-29
 
 - [INTERNAL] Switch to uv_build and move to src layout

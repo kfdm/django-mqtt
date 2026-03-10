@@ -5,7 +5,7 @@ import logging
 import paho.mqtt.client as mqtt
 
 
-from dmqtt.shortcuts import json_payload
+from dmqtt.decorators import json_payload
 from dmqtt.signals import connect, message
 
 

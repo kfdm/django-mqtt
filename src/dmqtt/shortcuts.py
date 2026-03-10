@@ -1,4 +1,3 @@
-import json
 import uuid
 from functools import lru_cache, wraps
 
@@ -7,32 +6,12 @@ from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from paho.mqtt import publish
 
-# The JSONEncoder from DRF handles quite a few types, so we default to that
-# if available and if not fallback to the Django one which still handles some
-# extra types
-try:
-    from rest_framework.utils.encoders import JSONEncoder
-except ImportError:
-    from django.core.serializers.json import DjangoJSONEncoder as JSONEncoder
+from .decorators import json_payload
 
-
-__all__ = ["single", "json_payload"]
-
-
-def json_payload(func):
-    """
-    Decorator to add json support to MQTT publish methods
-    """
-
-    @wraps(func)
-    def __inner(*args, **kwargs):
-        if "json" in kwargs:
-            data = kwargs.pop("json")
-            kwargs["payload"] = json.dumps(data, cls=JSONEncoder).encode("utf8")
-
-        return func(*args, **kwargs)
-
-    return __inner
+__all__ = [
+    "default_client_id",
+    "single",
+]
 
 
 @lru_cache(maxsize=1)

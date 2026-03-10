@@ -30,3 +30,8 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+MQTT_HOST = "localhost"
+MQTT_PORT = 1883
+MQTT_PASS = "testing"
+MQTT_USER = "testing"

@@ -1,3 +1,8 @@
+# 0.7.0 - 2026-05-30
+
+- [INTERNAL]: Add pre-commit config
+- [IMPROVEMENT]: Add check for signals
+
 # 0.6.0 - 2026-03-10
 
 - [IMPROVEMENT] Add `dmqtt.shortcuts.multiple` to match our earlier `single` shortcut and be more compatible with upstream.

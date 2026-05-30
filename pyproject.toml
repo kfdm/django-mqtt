@@ -2,7 +2,7 @@
 
 [project]
 name = "django-mqtt"
-version = "0.6.0"
+version = "0.7.0"
 license = "MIT"
 authors = [{ name = "Paul Traylor" }]
 keywords = ["django mqtt"]
@@ -49,7 +49,7 @@ Issues = "http://github.com/kfdm/django-mqtt/issues"
 line-length = 100
 
 [build-system]
-requires = ["uv_build>=0.9.11,<0.10.0"]
+requires = ["uv_build>=0.9.11,<0.12.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]

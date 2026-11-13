@@ -43,7 +43,7 @@ class Command(LoggingMixin, BaseCommand):
             tls_config.update(settings.MQTT_TLS)
 
         if tls_config:
-            client.tls_set(**settings.MQTT_TLS)
+            client.tls_set(**tls_config)
 
         client.connect(kwargs["host"], kwargs["port"], 60)
 

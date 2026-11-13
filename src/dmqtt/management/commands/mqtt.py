@@ -19,6 +19,9 @@ class Command(LoggingMixin, BaseCommand):
         mqtt.add_argument("-H", "--host", default=settings.MQTT_HOST)
         mqtt.add_argument("--port", default=settings.MQTT_PORT, type=int)
         mqtt.add_argument("--client-id", default=default_client_id())
+        mqtt.add_argument("--ca_certificates", default=None)
+        mqtt.add_argument("--certfile", default=None)
+        mqtt.add_argument("--keyfile", default=None)
 
         celery = parser.add_argument_group("celery arguments")
         celery.add_argument("--eager", action="store_true")
@@ -27,8 +30,21 @@ class Command(LoggingMixin, BaseCommand):
         client = self.get_mqtt_client()(client_id=kwargs["client_id"])
         client.enable_logger()  # Use Python logging
         client.username_pw_set(kwargs["user"], password=kwargs["password"])
-        # TODO Fix
-        # client.tls_set()
+
+        tls_config = {}
+        if kwargs["ca_certificates"]:
+            tls_config['ca_certs'] = kwargs["ca_certificates"]
+        if kwargs["certfile"]:
+            tls_config['certfile'] = kwargs["certfile"]
+        if kwargs["keyfile"]:
+            tls_config['keyfile'] = kwargs["keyfile"]
+
+        if hasattr(settings, "MQTT_TLS"):
+            tls_config.update(settings.MQTT_TLS)
+
+        if tls_config:
+            client.tls_set(**settings.MQTT_TLS)
+
         client.connect(kwargs["host"], kwargs["port"], 60)
 
         try:

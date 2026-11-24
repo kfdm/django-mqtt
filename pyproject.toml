@@ -40,6 +40,16 @@ dependencies = [
 Issues = "http://github.com/kfdm/django-mqtt/issues"
 "Source Code" = "http://github.com/kfdm/django-mqtt"
 
+[dependency-groups]
+dev = [
+    "repo-review-classifiers>=0.1.0",
+    "repo-review-endoflife>=0.3.0",
+    "repo-review-just>=0.2.0",
+    "repo-review-readme>=0.1.1",
+    "repo-review[cli]>=1.2.2",
+    "validate-pyproject>=0.27",
+]
+
 [build-system]
 requires = ["uv_build>=0.9.11,<0.12.0"]
 build-backend = "uv_build"

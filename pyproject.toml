@@ -57,6 +57,25 @@ build-backend = "uv_build"
 [tool.ruff]
 line-length = 100
 
+[tool.ruff.lint]  # https://beta.ruff.rs/docs/rules/
+select = [
+    "C",        # Complexity
+    "E",        # pycodestyle
+    "F",        # Unused imports
+    "I",        # isort
+    "DJ",       # Django
+    "PGH004",   # Use specific rule codes when using noqa
+    "PLC0414",  # Useless import alias. Import alias does not rename original package.
+    "S103",     # bad-file-permissions
+    "TRY004",   # Prefer TypeError exception for invalid type
+    "UP",       # pyupgrade
+    "W",        # pycodestyle
+]
+ignore = [
+    "E501",     # Don't enforce line length for now
+    "E741",     # Ambiguous variable name
+]
+
 [tool.setuptools.packages.find]
 exclude = ["test"]
 

@@ -7,13 +7,42 @@ MQTT tools for Django project
 [![PyPI License](https://img.shields.io/pypi/l/django-mqtt)](https://pypi.org/project/django-mqtt)
 [![Published on Django Packages](https://img.shields.io/badge/Published%20on-Django%20Packages-0c3c26)](https://djangopackages.org/packages/p/django-mqtt/)
 
+# Installation
+
+```python
+# In your settings.py
+# Update INSTALLED APPS
+INSTALLED_APPS = [
+    "django.contrib.auth",
+    "django.contrib.sites",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "...",
+    "dmqtt", # << Add this to your apps
+]
+
+# Configure connection settings
+MQTT_HOST = "localhost"
+MQTT_PORT = 1883
+MQTT_PASS = "testing"
+MQTT_USER = "testing"
+
+# Optional TLS settings
+# https://eclipse.dev/paho/files/paho.mqtt.python/html/client.html#paho.mqtt.client.Client.tls_set
+MQTT_TLS = {}
+```
+
 # Usage
 
-- Add `"dmqtt"` to your `INSTALLED_APPS`
-- Add `MQTT_HOST`, `MQTT_USER`, `MQTT_PASS`, `MQTT_PORT`
-- tls settings can be configured by setting `MQTT_TLS` in in accordenace with paho mqtt client settings.
-  <https://eclipse.dev/paho/files/paho.mqtt.python/html/client.html#paho.mqtt.client.Client.tls_set>.
-- Run with `python manage.py mqtt`
+```shell
+# Launch client that will listen to mqtt messages
+python manage.py mqtt
+
+# or send a test message to your broker
+echo 'test-message' | python.manage mqtt my-topic
+```
+
+Configure senders to listen to mqtt signals
 
 ```python
 from dmqtt.signals import connect, regex, topic

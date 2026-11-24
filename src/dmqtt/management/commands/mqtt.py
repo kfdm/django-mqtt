@@ -15,14 +15,14 @@ class Command(ClientMixin, LoggingMixin, BaseCommand):
         celery = parser.add_argument_group("celery arguments")
         celery.add_argument("--eager", action="store_true")
 
-    def handle(self, eager, **kwargs):
-        client = self.get_mqtt_client()(client_id=kwargs["client_id"])
+    def handle(self, eager, **options):
+        client = self.get_mqtt_client()(client_id=options["client_id"])
         client.enable_logger()  # Use Python logging
-        if auth := self.auth_arguments(kwargs):
+        if auth := self.auth_arguments(options):
             client.username_pw_set(**auth)
         # TODO Fix
         # client.tls_set()
-        client.connect(kwargs["host"], kwargs["port"], 60)
+        client.connect(options["host"], options["port"], 60)
 
         try:
             from setproctitle import setproctitle

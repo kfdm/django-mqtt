@@ -1,3 +1,7 @@
+# Upcoming
+
+- [IMPROVEMENT] - Add `MQTT_TLS` for tls settings.
+
 # 0.7.0 - 2026-05-30
 
 - [INTERNAL]: Add pre-commit config

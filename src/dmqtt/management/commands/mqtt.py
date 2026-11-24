@@ -18,10 +18,13 @@ class Command(ClientMixin, LoggingMixin, BaseCommand):
     def handle(self, eager, **options):
         client = self.get_mqtt_client()(client_id=options["client_id"])
         client.enable_logger()  # Use Python logging
+
         if auth := self.auth_arguments(options):
             client.username_pw_set(**auth)
-        # TODO Fix
-        # client.tls_set()
+
+        if tls := self.tls_arguments(options):
+            client.tls_set(**tls)
+
         client.connect(options["hostname"], options["port"], 60)
 
         try:

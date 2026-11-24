@@ -9,6 +9,8 @@ MQTT tools for Django project
 
 - Add `"dmqtt"` to your `INSTALLED_APPS`
 - Add `MQTT_HOST`, `MQTT_USER`, `MQTT_PASS`, `MQTT_PORT`
+- tls settings can be configured by setting `MQTT_TLS` in in accordenace with paho mqtt client settings.
+  <https://eclipse.dev/paho/files/paho.mqtt.python/html/client.html#paho.mqtt.client.Client.tls_set>.
 - Run with `python manage.py mqtt`
 
 ```python

@@ -21,6 +21,9 @@ class Command(ClientMixin, LoggingMixin, BaseCommand):
         if auth := self.auth_arguments(options):
             kwargs["auth"] = auth
 
+        if tls := self.tls_arguments(kwargs):
+            kwargs["tls"] = tls
+
         single(
             topic=topic,
             payload=payload,

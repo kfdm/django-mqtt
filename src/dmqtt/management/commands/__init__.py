@@ -15,6 +15,11 @@ class ClientMixin:
         mqtt.add_argument("--port", default=settings.MQTT_PORT, type=int)
         mqtt.add_argument("--client-id", default=default_client_id())
 
+        tls = parser.add_argument_group("optional tls arguments")
+        tls.add_argument("--ca_certs", default=None)
+        tls.add_argument("--certfile", default=None)
+        tls.add_argument("--keyfile", default=None)
+
     def client_arguments(self, options) -> dict:
         return {
             k: options[k]
@@ -30,6 +35,11 @@ class ClientMixin:
 
     def auth_arguments(self, options) -> dict:
         return {k: options[k] for k in ["username", "password"] if options.get(k)}
+
+    def tls_arguments(self, options) -> dict:
+        tls = getattr(settings, "MQTT_TLS", {}).copy()
+        tls.update({k: options[k] for k in ["ca_certs", "certfile", "keyfile"] if options.get(k)})
+        return tls
 
 
 class LoggingMixin:

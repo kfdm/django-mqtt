@@ -1,9 +1,8 @@
-from django.utils.module_loading import import_string
-from django.conf import settings
 import logging
 
 import paho.mqtt.client as mqtt
-
+from django.conf import settings
+from django.utils.module_loading import import_string
 
 from dmqtt.decorators import json_payload
 from dmqtt.signals import connect, message

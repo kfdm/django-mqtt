@@ -1,13 +1,13 @@
-import uuid
 import typing
+import uuid
 from functools import lru_cache, wraps
 
 from django.apps import apps
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from paho.mqtt import publish
-from .decorators import json_payload
 
+from .decorators import json_payload
 
 if typing.TYPE_CHECKING:
     from paho.mqtt.client import PayloadType
@@ -57,7 +57,7 @@ def single(
     """
     Wrapped version of single, supporting AUTH and json payload
     """
-    msg: "publish.MessageDict" = {
+    msg: publish.MessageDict = {
         "topic": topic,
         "payload": payload,
         "qos": qos,

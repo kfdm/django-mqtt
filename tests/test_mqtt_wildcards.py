@@ -1,6 +1,5 @@
 from dmqtt.signals import convert_wildcards
 
-
 from . import BaseTest
 
 

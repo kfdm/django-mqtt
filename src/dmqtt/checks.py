@@ -1,6 +1,5 @@
-from django.core.checks import Error, register, Warning
 from django.conf import settings
-
+from django.core.checks import Error, Warning, register
 
 setting_names = [
     "MQTT_HOST",

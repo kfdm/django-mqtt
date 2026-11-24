@@ -1,11 +1,11 @@
-from . import LoggingMixin
-
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.test import override_settings
 
-from dmqtt.shortcuts import default_client_id
 from dmqtt.client import Client, get_client
+from dmqtt.shortcuts import default_client_id
+
+from . import LoggingMixin
 
 
 class Command(LoggingMixin, BaseCommand):

@@ -1,7 +1,8 @@
 from unittest import mock
 
-from . import BaseTest
 from dmqtt import shortcuts
+
+from . import BaseTest
 
 
 class ShortcutTests(BaseTest):

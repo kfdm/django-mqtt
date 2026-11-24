@@ -2,9 +2,9 @@ import functools
 import json
 import logging
 import re
-import django.dispatch
-
 from typing import TYPE_CHECKING
+
+import django.dispatch
 
 if TYPE_CHECKING:
     from paho.mqtt.client import MQTTMessage

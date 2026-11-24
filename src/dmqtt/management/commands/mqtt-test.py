@@ -1,9 +1,8 @@
 import sys
 
-from paho.mqtt.publish import single
-
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandParser
+from paho.mqtt.publish import single
 
 from dmqtt.shortcuts import default_client_id
 

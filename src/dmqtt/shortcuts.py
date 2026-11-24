@@ -23,7 +23,8 @@ __all__ = [
 @lru_cache(maxsize=1)
 def default_client_id():
     if apps.is_installed("django.contrib.sites"):
-        return (get_current_site(None).domain + "-%d" % uuid.uuid4().int)[:32]
+        return f"{get_current_site(None).domain}-{uuid.uuid4().hex}"[:32]
+
     return ""
 
 

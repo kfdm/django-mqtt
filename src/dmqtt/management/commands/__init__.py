@@ -11,17 +11,25 @@ class ClientMixin:
         mqtt = parser.add_argument_group("mqtt connection arguments")
         mqtt.add_argument("-u", "--username", default=settings.MQTT_USER)
         mqtt.add_argument("-P", "--password", default=settings.MQTT_PASS)
-        mqtt.add_argument("-H", "--host", default=settings.MQTT_HOST)
+        mqtt.add_argument("-H", "--hostname", default=settings.MQTT_HOST)
         mqtt.add_argument("--port", default=settings.MQTT_PORT, type=int)
         mqtt.add_argument("--client-id", default=default_client_id())
 
-    def auth_arguments(self, options) -> dict:
-        auth = {}
-        for key in ["username", "password"]:
-            if key in options:
-                auth[key] = options[key]
+    def client_arguments(self, options) -> dict:
+        return {
+            k: options[k]
+            for k in [
+                "qos",
+                "retain",
+                "client_id",
+                "hostname",
+                "port",
+            ]
+            if options.get(k)
+        }
 
-        return auth
+    def auth_arguments(self, options) -> dict:
+        return {k: options[k] for k in ["username", "password"] if options.get(k)}
 
 
 class LoggingMixin:

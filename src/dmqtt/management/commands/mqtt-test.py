@@ -17,17 +17,12 @@ class Command(ClientMixin, LoggingMixin, BaseCommand):
     def handle(self, topic, **options):
         payload = sys.stdin.read().strip().encode("utf8")
 
-        kwargs = {}
+        kwargs = self.client_arguments(options)
         if auth := self.auth_arguments(options):
             kwargs["auth"] = auth
 
         single(
             topic=topic,
             payload=payload,
-            qos=options["qos"],
-            retain=options["retain"],
-            client_id=options["client_id"],
-            hostname=options["host"],
-            port=options["port"],
             **kwargs,
         )

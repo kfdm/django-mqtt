@@ -22,7 +22,7 @@ class Command(ClientMixin, LoggingMixin, BaseCommand):
             client.username_pw_set(**auth)
         # TODO Fix
         # client.tls_set()
-        client.connect(options["host"], options["port"], 60)
+        client.connect(options["hostname"], options["port"], 60)
 
         try:
             from setproctitle import setproctitle

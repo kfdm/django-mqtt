@@ -1,32 +1,25 @@
-from django.conf import settings
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandParser
 from django.test import override_settings
 
 from dmqtt.client import Client, get_client
-from dmqtt.shortcuts import default_client_id
 
-from . import LoggingMixin
+from . import ClientMixin, LoggingMixin
 
 
-class Command(LoggingMixin, BaseCommand):
+class Command(ClientMixin, LoggingMixin, BaseCommand):
     def get_mqtt_client(self) -> type[Client]:
         return get_client()
 
-    def add_arguments(self, parser):
-        mqtt = parser.add_argument_group("mqtt server arguments")
-        mqtt.add_argument("-u", "--user", default=settings.MQTT_USER)
-        mqtt.add_argument("-P", "--password", default=settings.MQTT_PASS)
-        mqtt.add_argument("-H", "--host", default=settings.MQTT_HOST)
-        mqtt.add_argument("--port", default=settings.MQTT_PORT, type=int)
-        mqtt.add_argument("--client-id", default=default_client_id())
-
+    def add_arguments(self, parser: CommandParser):
+        super().add_arguments(parser)
         celery = parser.add_argument_group("celery arguments")
         celery.add_argument("--eager", action="store_true")
 
     def handle(self, eager, **kwargs):
         client = self.get_mqtt_client()(client_id=kwargs["client_id"])
         client.enable_logger()  # Use Python logging
-        client.username_pw_set(kwargs["user"], password=kwargs["password"])
+        if auth := self.auth_arguments(kwargs):
+            client.username_pw_set(**auth)
         # TODO Fix
         # client.tls_set()
         client.connect(kwargs["host"], kwargs["port"], 60)

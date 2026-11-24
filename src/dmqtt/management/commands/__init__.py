@@ -50,7 +50,7 @@ class LoggingMixin:
                 1: logging.WARNING,
                 2: logging.INFO,
                 3: logging.DEBUG,
-            }.get(options["verbosity"])
+            }.get(options["verbosity"], logging.ERROR)
         )
 
         ch = logging.StreamHandler()

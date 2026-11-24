@@ -85,3 +85,7 @@ trailing-comment-alignment = true
 
 [tool.uv.build-backend]
 module-name = "dmqtt"
+
+[tool.ty.analysis]
+# Suppress errors for all `test` modules except `test.foo`
+allowed-unresolved-imports = ["setproctitle","rest_framework.utils.encoders"]

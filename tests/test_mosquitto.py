@@ -4,8 +4,6 @@ from . import BaseTest
 
 
 class LoginTest(BaseTest):
-    fixtures = ["default"]
-
     @mock.patch("django.contrib.auth.signals.user_login_failed.send")
     @mock.patch("django.contrib.auth.signals.user_logged_in.send")
     def test_successfull_login(self, signal_success, signal_failed):

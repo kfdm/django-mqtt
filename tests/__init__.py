@@ -3,7 +3,7 @@ from django.test.client import Client
 
 
 class BaseTest(TestCase):
-    fixtures = ["default"]
+    fixtures = ["default"]  # NOQA: RUF012
 
     def setUp(self):
         super().setUp()

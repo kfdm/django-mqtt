@@ -29,8 +29,8 @@ def signals_check(app_configs, **kwargs):
         "dmqtt.signals.message": signals.message,
     }
 
-    for name in check_signals:
-        if not check_signals[name].has_listeners():
+    for name, signal in check_signals.items():
+        if not signal.has_listeners():
             yield Warning(
                 msg=f"Missing recivers for {name}",
                 hint="Ensure that your signals are loaded in your AppConfig.ready method",

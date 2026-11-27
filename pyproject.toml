@@ -1,12 +1,16 @@
 [project]
 name = "django-mqtt"
-version = "0.8.0"
-
+version = "0.9.0"
+description = "Django MQTT integration"
+readme = "README.md"
 # https://endoflife.date/python
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "MIT"
 authors = [{ name = "Paul Traylor" }]
-keywords = ["django mqtt"]
+keywords = [
+    "django",
+    "mqtt",
+]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Web Environment",
@@ -32,7 +36,7 @@ classifiers = [
 ]
 # https://endoflife.date/django
 dependencies = [
-    "Django>=4.2",
+    "Django>=5.2",
     "paho-mqtt",
 ]
 
@@ -83,9 +87,9 @@ exclude = ["test"]
 indent-width = 4
 trailing-comment-alignment = true
 
-[tool.uv.build-backend]
-module-name = "dmqtt"
-
 [tool.ty.analysis]
 # Suppress errors for all `test` modules except `test.foo`
-allowed-unresolved-imports = ["setproctitle","rest_framework.utils.encoders"]
+allowed-unresolved-imports = ["setproctitle", "rest_framework.utils.encoders"]
+
+[tool.uv.build-backend]
+module-name = "dmqtt"

@@ -1,3 +1,8 @@
+# 0.9.0 - 2026-11-27
+
+- [INTERNAL] - Bump minimal Django and Python versions
+- [DOCS] - Fix README on PyPI
+
 # 0.8.0 - 2026-11-27
 
 - [IMPROVEMENT] - Add `MQTT_TLS` for tls settings.

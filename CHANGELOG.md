@@ -1,6 +1,9 @@
-# Upcoming
+# 0.8.0 - 2026-11-27
 
 - [IMPROVEMENT] - Add `MQTT_TLS` for tls settings.
+- [INTERNAL] - Refactor management commands to combine common parts.
+- [INTERNAL] - Minor fixes based on linting/formatting.
+- [DOCS] - Improve readme.
 
 # 0.7.0 - 2026-05-30
 
